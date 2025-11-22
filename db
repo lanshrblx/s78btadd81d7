@@ -1,4 +1,4 @@
-local decryptedAPIS = {"ABTestAPI/RefreshGroup",
+globalDecryptedAPIS = {"ABTestAPI/RefreshGroup",
 "AchievementsAPI/ClaimReward",
 "AchievementsAPI/StopReplayingAchievement",
 "AchievementsAPI/StartReplayingAchievement",
