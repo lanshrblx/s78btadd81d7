@@ -1,0 +1,97 @@
+local function findCurrentEntity(PlayerName)
+    local Fsys = require(game.ReplicatedStorage.Fsys)
+    local PetEntityManager = Fsys.load("PetEntityManager")
+    local CharWrapperClient = Fsys.load("CharWrapperClient")
+    local currentEntity = 0
+    CharWrapperClient.register_pet_wrapper_char_changed(function(oldPets, newPets, allPets)
+        for _, petWrapper in ipairs(newPets) do
+            currentEntity = PetEntityManager.get_local_owned_pet_entities(PlayerName)[1]
+        end
+    end)
+    return currentEntity
+end
+
+local plr = game:GetService("Players").LocalPlayer
+local targetPet = findCurrentEntity(plr)
+
+local function directPetting(petEntity)
+    local PetEntityHelper = require(game.ReplicatedStorage.Fsys).load("PetEntityHelper")
+    local RunService = game:GetService("RunService")
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    
+    local isActive = true
+    local petModel = workspace.Pets:FindFirstChild("Cat") -- Найди правильную модель питомца
+
+    -- 1. Начало поглаживания - устанавливаем перформансы
+    if petModel then
+        local args1 = {
+            petModel,
+            {
+                FocusPet = true,
+                Petting = true,
+                Dirty = true
+            }
+        }
+        game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args1))
+    end
+
+    -- Запускаем поглаживание (это запускает анимацию)
+    PetEntityHelper.stage_performance(petEntity, {
+        name = "Petting",
+        options = {
+            update_petting = function()
+                if not isActive then
+                    return nil, false
+                end
+                return Vector2.new(mouse.X, mouse.Y), true
+            end
+        }
+    })
+    
+    -- Ждем 2 секунды для анимации
+    wait(2)
+    
+    -- 2. Переход в счастливое состояние
+    if petModel then
+        local args2 = {
+            petModel,
+            {
+                FocusPet = true,
+                PettingHappy = true,  -- Меняем на PettingHappy
+                Dirty = true
+            }
+        }
+        game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args2))
+    end
+    
+    -- Ждем еще 1 секунду
+    wait(1)
+    
+    -- Останавливаем поглаживание
+    isActive = false
+    PetEntityHelper.end_performance(petEntity, "Petting")
+    
+    -- 3. Завершение поглаживания
+    if petModel then
+        local args3 = {
+            petModel,
+            {
+                FocusPet = true,
+                Dirty = true  -- Убираем Petting и PettingHappy
+            }
+        }
+        game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args3))
+    end
+    
+    -- 4. 🔥 ВЫЗЫВАЕМ PetPetted ДЛЯ ЗАДАНИЯ
+    local args4 = {
+        "2_a91f4904f09e4824ad7ff24dc38df4ea",
+        game:GetService("Players").LocalPlayer
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/PetPetted"]:FireServer(unpack(args4))
+    
+    print("Petting completed! Quest should be updated.")
+end
+
+-- Использование:
+directPetting(targetPet)
