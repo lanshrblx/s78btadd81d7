@@ -1,0 +1,115 @@
+local function findCurrentEntity(PlayerName)
+    local Fsys = require(game.ReplicatedStorage.Fsys)
+    local PetEntityManager = Fsys.load("PetEntityManager")
+    local CharWrapperClient = Fsys.load("CharWrapperClient")
+    local currentEntity = 0
+    CharWrapperClient.register_pet_wrapper_char_changed(function(oldPets, newPets, allPets)
+        for _, petWrapper in ipairs(newPets) do
+            currentEntity = PetEntityManager.get_local_owned_pet_entities(PlayerName)[1]
+        end
+    end)
+    return currentEntity
+end
+local plr = game:GetService("Players").LocalPlayer
+local targetPet = findCurrentEntity(plr)
+local function simulateFullPetting(petEntity)
+    local petModel = workspace.Pets:FindFirstChild("Cat")
+    if not petModel then
+        warn("Pet model not found!")
+        return
+    end
+    local args1 = {
+        petModel,
+        {
+            FocusPet = true,
+            Petting = true,
+            Dirty = true
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args1))
+    local args2 = {
+        petModel,
+        {
+            local_anim_name = "CatIdle",
+            local_anim_speed = 1,
+            dont_allow_sit_states = true,
+            pause_ailment_chat_bubbles = true,
+            eyes_id = "drowsy_eyes",
+            anim_fade_time = 0.2,
+            dont_allow_remote_interaction = true,
+            effects = {"stinky"}
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicatePerformanceModifiers"]:FireServer(unpack(args2))
+    wait(1)
+    local args3 = {
+        petModel,
+        {
+            anim_fade_time = 0.2,
+            local_anim_speed = 0.25,
+            dont_allow_sit_states = true,
+            pause_ailment_chat_bubbles = true,
+            eyes_id = "squinting_eyes",
+            dont_allow_remote_interaction = true,
+            local_anim_name = "CatIdle",
+            effects = {"love"}
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicatePerformanceModifiers"]:FireServer(unpack(args3))
+    wait(1)
+    local args4 = {
+        petModel,
+        {
+            FocusPet = true,
+            PettingHappy = true,
+            Dirty = true
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args4))
+    local args5 = {
+        petModel,
+        {
+            anim_fade_time = 0.2,
+            local_anim_speed = 1,
+            dont_allow_sit_states = true,
+            pause_ailment_chat_bubbles = true,
+            eyes_id = "happy_eyes",
+            dont_allow_remote_interaction = true,
+            local_anim_name = "CatIdle",
+            effects = {"hearts", "surprised"}
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicatePerformanceModifiers"]:FireServer(unpack(args5))
+    wait(1)
+    local args6 = {
+        petModel,
+        {
+            FocusPet = true,
+            Dirty = true
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicateActivePerformances"]:FireServer(unpack(args6))
+    local args7 = {
+        petModel,
+        {
+            eyes_id = "drowsy_eyes",
+            local_anim_speed = 1,
+            dont_allow_sit_states = true,
+            dont_allow_remote_interaction = true,
+            anim_fade_time = 0.2,
+            local_anim_name = "CatIdle",
+            effects = {"stinky"}
+        }
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/ReplicatePerformanceModifiers"]:FireServer(unpack(args7))
+    local args8 = {
+        "2_a91f4904f09e4824ad7ff24dc38df4ea",
+        game:GetService("Players").LocalPlayer
+    }
+    game:GetService("ReplicatedStorage").API["PetAPI/PetPetted"]:FireServer(unpack(args8))
+    
+    print("Petting completed! Quest should be updated.")
+end
+
+-- Использование:
+simulateFullPetting(targetPet)
