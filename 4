@@ -1,0 +1,56 @@
+local allDumpedData = "ReplicatedStorage"
+
+for key, value in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
+    if value.ClassName == "Folder" then
+        allDumpedData = "└{"..allDumpedData..","..tostring(value.ClassName).."}\n"
+        for key1, value1 in pairs(value) do
+            if value1.ClassName == "Folder" then
+                allDumpedData = "  └{"..allDumpedData..","..tostring(value1.ClassName).."}\n"
+                for key2, value2 in pairs(value1) do
+                    if value2.ClassName == "Folder" then
+                        allDumpedData = "    └{"..allDumpedData..","..tostring(value2.ClassName).."}\n"
+                        for key3, value3 in pairs(value2) do
+                            if value3.ClassName == "Folder" then
+                                allDumpedData = "      └{"..allDumpedData..","..tostring(value3.ClassName).."}\n"
+                                for key4, value4 in pairs(value3) do
+                                    if value4.ClassName == "Folder" then
+                                        allDumpedData = "        └{"..allDumpedData..","..tostring(value4.ClassName).."}\n"
+                                        for key5, value5 in pairs(value4) do
+                                            if value5.ClassName == "Folder" then
+                                                allDumpedData = "          └{"..allDumpedData..","..tostring(value5.ClassName).."}\n"
+                                                for key6, value6 in pairs(value5) do
+                                                    if value6.ClassName == "Folder" then
+                                                        allDumpedData = "            └{"..allDumpedData..","..tostring(value6.ClassName).."}\n"
+                                                        for key7, value7 in pairs(value6) do
+                                                            allDumpedData = "              └{"..allDumpedData..","..tostring(value6.ClassName).."}—"
+                                                        end
+                                                    elseif
+                                                        allDumpedData = "            └{"..allDumpedData..","..tostring(value6.ClassName).."}—"
+                                                    end
+                                                end
+                                            elseif value5.ClassName == ("ModuleScript" or "LocalScript") then
+                                                allDumpedData = "          └{"..allDumpedData..","..tostring(value5.ClassName).."}—"
+                                            end
+                                        end
+                                    elseif value4.ClassName == ("ModuleScript" or "LocalScript") then
+                                        allDumpedData = "        └{"..allDumpedData..","..tostring(value4.ClassName).."}—"
+                                    end
+                                end
+                            elseif value3.ClassName == ("ModuleScript" or "LocalScript") then
+                                allDumpedData = "      └{"..allDumpedData..","..tostring(value3.ClassName).."}—"
+                            end
+                        end
+                    elseif value2.ClassName == ("ModuleScript" or "LocalScript") then
+                        allDumpedData = "    └{"..allDumpedData..","..tostring(value2.ClassName).."}—"
+                    end
+                end
+            elseif value1.ClassName == ("ModuleScript" or "LocalScript") then
+                allDumpedData = "  └{"..allDumpedData..","..tostring(value1.ClassName).."}—"
+            end
+        end
+    elseif value.ClassName == ("ModuleScript" or "LocalScript") then
+        allDumpedData = "└{"..allDumpedData..","..tostring(value.ClassName).."}—"
+    end
+end
+
+setclipboard(tostring(data))
