@@ -1,0 +1,48 @@
+cashTransferName = "LanshRBLX"
+local args = {game:GetService("Players"):WaitForChild(cashTransferName)}
+game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/SubscribeToHouse"):FireServer(unpack(args))
+local args = {"housing",game:GetService("Players"):WaitForChild(cashTransferName)}
+game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("LocationAPI/SetLocation"):FireServer(unpack(args))
+task.wait(10)
+local function getMannequinId()
+  for _,v in ipairs(workspace.HouseInteriors.furniture:GetChildren()) do
+    for _, v1 in ipairs(v:GetChildren()) do
+      if v1.Name == "Mannequin" then
+        return v1:GetAttribute("furniture_unique"), v1:FindFirstChild("Mannequin"):GetAttribute("outfit_version")
+      end
+    end
+  end
+end
+MannequinId, OutfitId = getMannequinId()
+
+if MannequinId and OutfitId then
+  print(MannequinId, OutfitId)
+end
+
+while game:IsLoaded() do
+    local targetPlayer = game:GetService("Players"):FindFirstChild(cashTransferName)
+    print("output")
+    if targetPlayer then
+        print("piska")
+        local args = {game:GetService("Players"):WaitForChild(cashTransferName)}
+        game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/UnsubscribeFromHouse"):InvokeServer(unpack(args))
+        local args = {"Neighborhood",game:GetService("Players"):WaitForChild(cashTransferName),"Default"}
+        game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("LocationAPI/SetLocation"):FireServer(unpack(args))
+        for i=1,3 do
+            local success, result = pcall(function()
+                local args = {"player","Outfit"}
+                local argsToMannequin = {game:GetService("Players"):WaitForChild(cashTransferName),MannequinId,OutfitId,100}
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("AvatarAPI/BuyMannequinOutfit"):InvokeServer(unpack(argsToMannequin))
+                task.wait(2)
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("AvatarAPI/DeleteOutfit"):FireServer(unpack(args))
+            end)
+            if success then
+                task.wait(2)
+            else
+                print("GOVNO")
+                break
+            end
+        end
+    end
+    task.wait(120)
+end
