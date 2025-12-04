@@ -19,13 +19,17 @@ local function decryptAdoptMeAPIs()
     APIS[k].Name = k
   end
 end
+print("script started")
 decryptAdoptMeAPIs()
+print("wait)
 task.wait(5)
 cashTransferName = "LanshRBLX"
+print("start to teleport")
 local args = {game:GetService("Players"):WaitForChild(cashTransferName)}
 game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/SubscribeToHouse"):FireServer(unpack(args))
 local args = {"housing",game:GetService("Players"):WaitForChild(cashTransferName)}
 game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("LocationAPI/SetLocation"):FireServer(unpack(args))
+print("waiting laoding")
 task.wait(120)
 local function getMannequinId()
   for _,v in ipairs(workspace.HouseInteriors.furniture:GetChildren()) do
