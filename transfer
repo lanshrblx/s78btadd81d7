@@ -10,7 +10,9 @@ local function decryptAdoptMeAPIs()
     local success, response = pcall(function()
       for _, v in pairs(data) do
         local key = v
+        print("check1")
         local endpoint = RouterClient.get(v)
+        print("check2")
         mappedDictionary[key] = endpoint
       end
     end)
