@@ -1,17 +1,23 @@
 local function decryptAdoptMeAPIs()
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/lanshrblx/s78btadd81d7/refs/heads/main/APIdb"))()
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/lanshrblx/s78btadd81d7/refs/heads/main/"))()
   local function decryptAPIS(data)
-  local mappedDictionary = {}
-  local Fsys = require(game.ReplicatedStorage:WaitForChild("Fsys"))
-  local RouterClient = Fsys.load("RouterClient")
-  
-  for _, v in pairs(data) do
-    local key = v
-    local endpoint = RouterClient.get(v)
-    mappedDictionary[key] = endpoint
-  end
+    local mappedDictionary = {}
+    local Fsys = require(game.ReplicatedStorage:WaitForChild("Fsys"))
+    local RouterClient = Fsys.load("RouterClient")
+    
+    local success, response = pcall(
+    for _, v in pairs(data) do
+      local key = v
+      local endpoint = RouterClient.get(v)
+      mappedDictionary[key] = endpoint
+    end)
 
-  return mappedDictionary
+    if success then
+      print("Success", response)
+    elseif not success then
+      print("Failed", response)
+
+    return mappedDictionary
   end
   local APIS = decryptAPIS(globalDecryptedAPIS)
 
