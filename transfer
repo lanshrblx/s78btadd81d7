@@ -1,5 +1,5 @@
 local function decryptAdoptMeAPIs()
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/lanshrblx/s78btadd81d7/refs/heads/main/"))()
+  loadstring(game:HttpGet("https://raw.githubusercontent.com/lanshrblx/s78btadd81d7/refs/heads/main/APIdb"))()
   
   local function decryptAPIS(data)
     local mappedDictionary = {}
