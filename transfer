@@ -5,7 +5,7 @@ local function decryptAdoptMeAPIs()
     local Fsys = require(game.ReplicatedStorage:WaitForChild("Fsys"))
     local RouterClient = Fsys.load("RouterClient")
     
-    local success, response = pcall(
+    local success, response = pcall(function()
     for _, v in pairs(data) do
       local key = v
       local endpoint = RouterClient.get(v)
